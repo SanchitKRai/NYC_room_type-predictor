@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a2b">
+  <meta name="description" content="Predict whether a New York City Airbnb listing is an entire home, private room, or shared room using machine learning.">
+  <title>NYC Airbnb Predictor</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-bg"></div>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar shell">
+    <a class="brand" href="#" aria-label="NYC Airbnb Predictor home">
+      <span class="brand-mark">⌂</span><span>NYC Airbnb <b>Predictor</b></span>
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a class="active" href="#home">Home</a><a href="#how-it-works">How it works</a><a href="#insights">Insights</a>
+    </nav>
+    <div class="top-actions">
+      <a class="github-pill" href="https://github.com/" target="_blank" rel="noreferrer"><span class="github-icon">◉</span> GitHub</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☼</button>
+    </div>
+  </header>
+
+  <main id="home" class="shell">
+    <section class="hero-copy">
+      <div class="eyebrow"><span class="pulse"></span> MACHINE LEARNING · NYC DATA</div>
+      <h1>Find out what kind of<br>room this <span>NYC Airbnb</span> is.</h1>
+      <p>Enter a few listing details and let our machine learning model estimate whether it’s an entire home, a private room, or a shared room.</p>
+      <div class="hero-tags"><span>✦ Model-powered</span><span>⌖ New York City</span><span>↗ Instant prediction</span></div>
+    </section>
+
+    <section class="workspace" aria-label="Room type prediction">
+      <form id="predictionForm" class="form-card">
+        <div class="form-head">
+          <div><span class="step-label">YOUR LISTING</span><h2>Listing details</h2><p>Fill in the details to get a prediction.</p></div>
+          <span class="form-icon">⌖</span>
+        </div>
+        <div class="examples"><span>Try an example</span>
+          <button type="button" class="example-chip" data-example="midtown">Midtown · $190</button>
+          <button type="button" class="example-chip" data-example="bushwick">Bushwick · $65</button>
+          <button type="button" class="example-chip" data-example="jamaica">Jamaica · $35</button>
+        </div>
+
+        <div class="section-title"><span class="section-icon pink">⌖</span><h3>Where is it?</h3></div>
+        <div class="field-grid">
+          <label>Borough
+            <select name="neighbourhood_group" id="borough" required>
+              <option>Bronx</option><option>Brooklyn</option><option>Manhattan</option><option>Queens</option><option>Staten Island</option>
+            </select>
+          </label>
+          <label>Neighbourhood
+            <input name="neighbourhood" id="neighbourhood" value="Baychester" required list="neighbourhoods" autocomplete="off">
+            <datalist id="neighbourhoods"><option value="Baychester"><option value="Midtown"><option value="Bushwick"><option value="Jamaica"><option value="Williamsburg"><option value="Harlem"><option value="Astoria"><option value="Upper West Side"><option value="Bedford-Stuyvesant"></datalist>
+          </label>
+          <label>Latitude<input name="latitude" id="latitude" type="number" step="any" value="40.8448" min="-90" max="90" required></label>
+          <label>Longitude<input name="longitude" id="longitude" type="number" step="any" value="-73.8648" min="-180" max="180" required></label>
+        </div>
+        <p class="helper">Borough coordinates are approximate. Use the listing’s exact coordinates when available.</p>
+
+        <div class="section-title separated"><span class="section-icon coral">$</span><h3>Price and stay</h3></div>
+        <div class="field-grid">
+          <label>Price per night <span class="input-wrap"><span>$</span><input name="price" type="number" value="40" min="1" step="0.01" required></span></label>
+          <label>Minimum nights<input name="minimum_nights" type="number" min="1" max="365" value="2" required></label>
+        </div>
+
+        <div class="section-title separated"><span class="section-icon violet">★</span><h3>Reviews</h3></div>
+        <div class="field-grid">
+          <label>Total reviews<input name="number_of_reviews" type="number" min="0" value="0" required></label>
+          <label>Reviews per month<input name="reviews_per_month" type="number" min="0" step="0.01" value="0" required></label>
+        </div>
+
+        <div class="section-title separated"><span class="section-icon blue">▦</span><h3>Host and availability</h3></div>
+        <div class="field-grid">
+          <label>Listings by this host<input name="calculated_host_listings_count" type="number" min="0" value="4" required></label>
+          <label class="availability-field"><span class="availability-label">Days available in a year <strong><output id="availabilityOutput">180 days</output></strong></span>
+            <input id="availability" name="availability_365" type="range" min="0" max="365" value="180">
+            <span class="range-ticks"><span>0 days</span><span>365 days</span></span>
+          </label>
+        </div>
+        <div class="form-footer">
+          <button class="predict-button" type="submit"><span class="sparkle">✦</span><span id="submitText">Predict room type</span><span>→</span></button>
+          <button class="clear-button" type="reset">↻ <span>Clear form</span></button>
+        </div>
+        <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
+      </form>
+
+      <div class="right-column">
+        <div class="room-gallery">
+          <div class="gallery-heading"><span>THREE POSSIBILITIES</span><span class="gallery-line"></span></div>
+          <div class="room-cards">
+            <article class="room-card room-entire"><img src="assets/entire-home.jpg" alt="Entire home room example"><span>Entire home</span></article>
+            <article class="room-card room-private"><img src="assets/private-room.jpg" alt="Private room example"><span>Private room</span></article>
+            <article class="room-card room-shared"><img src="assets/shared-room.jpg" alt="Shared room example"><span>Shared room</span></article>
+          </div>
+          <div class="handwritten">Explore New York<br>like a local <span>↗</span></div>
+        </div>
+
+        <section class="result-card" id="resultCard" aria-live="polite">
+          <div class="result-topline"><span>PREDICTION RESULT</span><span class="api-status"><i id="apiDot"></i><span id="apiStatus">Checking API…</span></span></div>
+          <div class="result-main">
+            <div class="bed-icon" id="resultIcon">⌂</div>
+            <div class="result-title-wrap"><h2 id="resultTitle">Ready to predict?</h2><p id="resultDescription">Submit the listing details to see the model’s estimate.</p></div>
+          </div>
+          <div class="confidence-badge">▥ <span id="confidenceText">MODEL OUTPUT</span></div>
+          <div class="probability-list">
+            <div class="probability-row"><div><span>Private room</span><strong id="privateValue">—</strong></div><div class="bar"><span id="privateBar"></span></div></div>
+            <div class="probability-row"><div><span>Shared room</span><strong id="sharedValue">—</strong></div><div class="bar"><span id="sharedBar"></span></div></div>
+            <div class="probability-row"><div><span>Entire home/apt</span><strong id="entireValue">—</strong></div><div class="bar"><span id="entireBar"></span></div></div>
+          </div>
+          <div class="result-bottom"><img src="assets/location-map.svg" alt="" class="mini-map"><div><span class="mini-label">LISTING LOCATION</span><strong id="locationName">Baychester, Bronx</strong><small>New York City, USA</small></div><span class="map-pin">⌖</span></div>
+          <p class="disclaimer">Predictions are estimates from a trained machine learning model, not a guarantee about a listing.</p>
+        </section>
+
+        <section class="feature-row" id="how-it-works">
+          <article><span class="feature-icon pink-bg">✺</span><div><h3>Machine learning</h3><p>Uses listing details to estimate room type.</p></div></article>
+          <article id="insights"><span class="feature-icon purple-bg">▥</span><div><h3>Explore insights</h3><p>Compare confidence across all classes.</p></div></article>
+          <article><span class="feature-icon blue-bg">⌖</span><div><h3>NYC focused</h3><p>Designed around New York Airbnb data.</p></div></article>
+        </section>
+      </div>
+    </section>
+    <footer><span>NYC Airbnb Predictor</span><span>Built with machine learning · FastAPI</span><span>Made for exploration, not booking advice.</span></footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
