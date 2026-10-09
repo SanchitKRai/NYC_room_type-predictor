@@ -1,4 +1,4 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "https://nyc-room-type-predictor-gpjz.onrender.com";
 const form = document.getElementById("predictionForm");
 const message = document.getElementById("formMessage");
 const submitButton = form.querySelector('button[type="submit"]');
