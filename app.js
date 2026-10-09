@@ -1,4 +1,4 @@
-const API_BASE = "https://nyc-room-type-predictor-gpjz.onrender.com";
+const API_BASE = "";
 const form = document.getElementById("predictionForm");
 const message = document.getElementById("formMessage");
 const submitButton = form.querySelector('button[type="submit"]');
