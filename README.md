@@ -162,6 +162,7 @@ The response includes `Predicted_room_type`, `Probability`, `classes`, `probabil
 ## Future Improvements
 
 - Add a map/geocoding integration for listing coordinates
+- train on large data
 - Populate neighbourhood choices from the model's known categories
 - Add model evaluation charts and feature explanations
 - Add automated tests for API validation and predictions
