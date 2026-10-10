@@ -170,4 +170,5 @@ The response includes `Predicted_room_type`, `Probability`, `classes`, `probabil
 
 ## Author
 
-Built as a machine-learning project to explore Airbnb listing characteristics and room-type classification in New York City.
+Built as a machine-learning and fastapi project to explore Airbnb listing characteristics and room-type classification in New York City.
+
